@@ -1,17 +1,24 @@
 #(https://school.programmers.co.kr/learn/courses/30/lessons/152995)
 #프로그래머스 Lv3 인사고과 문제
 
+#2번째 : 예외케이스 한개 추가 기준 점수보다 높지만 다른점수에비해 낮은 것들이 들어올경우 no count (72점)
+
 def solution(scores):
-    answer = 1
     whan_score = scores[0][0] + scores[0][1]
     big_score = scores[0]
+    answer = 1
 
     for i in range(1, len(scores)):
-        if (scores[0][0] < scores[i][0]) & + (scores[0][1] < scores[i][1]):
+        if (scores[0][0] < scores[i][0]) & (scores[0][1] < scores[i][1]):
             answer = -1
             break
         else:
-            if whan_score < (scores[i][0] + scores[i][1]):
-                answer += 1
-            continue
+            if (scores[i][0] < big_score[0]) & (scores[i][1] < big_score[1]):
+                continue
+            else:
+                if whan_score < (scores[i][0] + scores[i][1]):
+                    answer += 1
+                    if (scores[i][0] > big_score[0]) & (scores[i][1] > big_score[1]):
+                        big_score = scores[i]
+    print(answer)
     return answer
