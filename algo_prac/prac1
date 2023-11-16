@@ -1,24 +1,27 @@
 #(https://school.programmers.co.kr/learn/courses/30/lessons/152995)
 #프로그래머스 Lv3 인사고과 문제
 
-#2번째 : 예외케이스 한개 추가 기준 점수보다 높지만 다른점수에비해 낮은 것들이 들어올경우 no count (72점)
+#2번째 : 예외케이스 한개 추가 :기준 점수보다 높지만 다른점수에 비해 낮은 것들이 들어올경우 no count (72점)
+#3번째 : 런타임에러 발생 이를 수정해야함 (60점)
 
 def solution(scores):
     whan_score = scores[0][0] + scores[0][1]
-    big_score = scores[0]
+    filtered_scores = []
     answer = 1
 
-    for i in range(1, len(scores)):
-        if (scores[0][0] < scores[i][0]) & (scores[0][1] < scores[i][1]):
+    for count,score in enumerate(scores): #2중 리스트에서 변수로 리스트 하나가 오게된다. #enumerate 함수 사용시 카운터 및 리스트를 변수값으로 받을 수 있다.
+        if count == 0 and all(score[0] < other_score[0] and score[1] < other_score[1] for other_score in scores):
             answer = -1
             break
-        else:
-            if (scores[i][0] < big_score[0]) & (scores[i][1] < big_score[1]):
-                continue
-            else:
-                if whan_score < (scores[i][0] + scores[i][1]):
-                    answer += 1
-                    if (scores[i][0] > big_score[0]) & (scores[i][1] > big_score[1]):
-                        big_score = scores[i]
-    print(answer)
+        elif all(not(score[0] < other_score[0] and score[1] < other_score[1]) for other_score in scores):
+            filtered_scores.append(score)
+
+
+    for score in filtered_scores:
+        if whan_score < (score[0] + score[1]):
+            answer += 1
+
     return answer
+
+solution([[2,2],[1,4],[3,2],[3,2],[2,1]])
+solution([[30, 107], [100, 98], [80, 70]])
