@@ -3,25 +3,37 @@
 
 #2번째 : 예외케이스 한개 추가 :기준 점수보다 높지만 다른점수에 비해 낮은 것들이 들어올경우 no count (72점)
 #3번째 : 런타임에러 발생 이를 수정해야함 (60점)
+#4번째 : 2중 루프에서 조건에 맞지 않는 경우를 break로 나온다 (True값으로 해결) 88점
 
 def solution(scores):
     whan_score = scores[0][0] + scores[0][1]
-    filtered_scores = []
     answer = 1
+    filtered_scores = []
 
-    for count,score in enumerate(scores): #2중 리스트에서 변수로 리스트 하나가 오게된다. #enumerate 함수 사용시 카운터 및 리스트를 변수값으로 받을 수 있다.
-        if count == 0 and all(score[0] < other_score[0] and score[1] < other_score[1] for other_score in scores):
-            answer = -1
-            break
-        elif all(not(score[0] < other_score[0] and score[1] < other_score[1]) for other_score in scores):
+    # 완호가 인센티브를 받을 수 없는지 확인
+    for other_score in scores:
+        if scores[0][0] < other_score[0] and scores[0][1] < other_score[1]:
+            return -1  # 완호가 인센티브를 받을 수 없음
+
+    # 인센티브를 받을 수 있는 사원들만 필터링
+    for score in scores:
+        # 다른 사원과 비교하여 모든 점수가 낮지 않은지 확인
+        incentive_eligible = True
+        for other_score in scores:
+            if score[0] < other_score[0] and score[1] < other_score[1]:
+                incentive_eligible = False
+                break  # 현재 사원은 인센티브 자격 없음, 루프 탈출
+        # 인센티브 자격이 있는 사원만 필터링
+        if incentive_eligible:
             filtered_scores.append(score)
 
+    # 점수 합을 기준으로 정렬 (내림차순)
+    sorted_scores = sorted(filtered_scores, key=lambda x: x[0] + x[1], reverse=True)
 
-    for score in filtered_scores:
-        if whan_score < (score[0] + score[1]):
+    # 완호의 석차 계산
+    for score in sorted_scores:
+        if whan_score < sum(score):
             answer += 1
-
+        elif whan_score == sum(score):
+            break
     return answer
-
-solution([[2,2],[1,4],[3,2],[3,2],[2,1]])
-solution([[30, 107], [100, 98], [80, 70]])
