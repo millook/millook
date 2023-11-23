@@ -1,6 +1,7 @@
 #[PCCP 기출문제] 1번 level 1
 #목표 : 배열에 대한 개념 및 코드 사용 확인
 #1차시도 : 80점
+#2차시도 : 몬스터가 공격했을때, 연속시간도 초기화해야함 -> 100점
 
 def solution(bandage, health, attacks):
     attack_time = int(attacks[-1][0])
@@ -15,6 +16,7 @@ def solution(bandage, health, attacks):
             if i == attack[0]: #몬스터한테 공격당한 시간
                 hp -= attack[1]
                 attacks.remove(attack)
+                count = 0 #해당 코드 추가로 100점획득
                 if hp <= 0:
                     answer = -1
             else:
